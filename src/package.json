@@ -1,0 +1,31 @@
+{
+  "name": "zkillboard-discord-bot",
+  "version": "0.1.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.8.4",
+    "discord.js": "^14.18.0",
+    "mongoose": "^8.13.2",
+    "node-cron": "^4.0.7",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@types/memory-cache": "^0.2.6",
+    "@types/uuid": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.30.1",
+    "@typescript-eslint/parser": "^8.30.1",
+    "eslint": "^8.10.0",
+    "eslint-plugin-import": "^2.25.3",
+    "nodemon": "^3.1.9",
+    "typescript": "^5.8.3"
+  },
+  "package": {
+    "install": "package.json"
+  },
+  "scripts": {
+    "start": "cd dist && node index",
+    "build": "yarn eslint . && ./node_modules/typescript/bin/tsc",
+    "start.dev": "yarn && nodemon --ignore ./dist -e ts,twig,html,jpg,png,gif,svg --exec \"(yarn eslint . && ./node_modules/typescript/bin/tsc && cd dist && node index) || exit 1\""
+  }
+}

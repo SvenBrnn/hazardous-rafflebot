@@ -1,0 +1,27 @@
+version: '3.6'
+services:
+  discordbot:
+    build:
+      context: docker/nodejs/docker-dev
+      dockerfile: Dockerfile
+    image: nodejs-dev:20-alpine
+    environment:
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN}
+      DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
+      QUEUE_IDENTIFIER: ${QUEUE_IDENTIFIER}
+    volumes:
+      - ./src:/usr/src/app:delegated
+    ports:
+      - "4000:4000"
+
+  mongodb:
+    image: mongo:7.0.8
+    volumes:
+      - ./mongo-data:/data/db
+    ports:
+      - "127.0.0.1:27017:27017"
+
+networks:
+  default:
+    name: bot-network
+    driver: bridge
