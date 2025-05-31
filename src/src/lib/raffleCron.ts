@@ -127,6 +127,13 @@ export function startRaffleCron(client : Client<boolean>) {
                     components: raffle.codes && raffle.codes.length > 0 ? [actionRow] : [],
                 });
 
+                // Edit the original message if it exists to show the number of participants
+                if (message) {
+                    await message.edit({
+                        content: `Raffle **${raffle.name}** has ended! Number of participants: ${participants.length}. Winners: ${winnerMentions}`
+                    });
+                }
+
                 // Mark the raffle as drawn
                 raffle.drawn = true;
                 raffle.unusedCodes = allCodes; // Store remaining codes if any
