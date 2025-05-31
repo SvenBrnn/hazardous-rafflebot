@@ -130,7 +130,7 @@ export function startRaffleCron(client : Client<boolean>) {
                 // Edit the original message if it exists to show the number of participants
                 if (message) {
                     await message.edit({
-                        content: `Raffle **${raffle.name}** has ended! Number of participants: ${participants.length}. Winners: ${winnerMentions}`
+                        content: `Raffle **${raffle.name}** has ended! Number of participants: ${participants.length}. Winners: ${winnerMentions}`,
                     });
                 }
 
