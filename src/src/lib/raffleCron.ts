@@ -13,7 +13,7 @@ export function startRaffleCron(client : Client<boolean>) {
             // Lets first cleanup all raffles that are older than 30 days
             const thirtyDaysAgo = timestamp - (30 * 24 * 60 * 60 * 1000); // 30 days in milliseconds
             await RaffleSchema.deleteMany({ raffleEndTimestamp: { $lt: thirtyDaysAgo } });
-            console.log('Cleaned up raffles older than 30 days.');
+            // console.log('Cleaned up raffles older than 30 days.');
 
             // Try to get raffle's that ended in the last minute
             const raffles = await RaffleSchema.find({
@@ -22,7 +22,7 @@ export function startRaffleCron(client : Client<boolean>) {
             });
 
             if (raffles.length === 0) {
-                console.log('No raffles to process.');
+                // console.log('No raffles to process.');
                 return;
             }
             console.log(`Processing ${raffles.length} raffles that ended.`);
@@ -52,7 +52,14 @@ export function startRaffleCron(client : Client<boolean>) {
                 let participants: string[] = [];
                 if (reactions) {
                     // Fetch users who reacted with the ticket emoji
-                    participants = await reactions.users.fetch().then(users => users.map(user => user.id));
+                    while (participants.length < reactions.count - 1) { // -1 to exclude the bot itself
+                        const fetchedUsers = await reactions.users.fetch({
+                            limit: 100,
+                            after: participants.length > 0 ? participants[participants.length - 1] : undefined,
+                        });
+                        participants.push(...fetchedUsers.map(user => user.id));
+                        if (fetchedUsers.size < 100) break; // If less than 100 users fetched, we are done
+                    }
                     // Filter out the bot user
                     participants = participants.filter(userId => userId !== client.user?.id);
                 }
